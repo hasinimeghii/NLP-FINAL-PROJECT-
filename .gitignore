@@ -1,0 +1,15 @@
+# Python virtual environment
+venv/
+__pycache__/
+
+# Datasets and models
+data/
+models/
+runs/
+*.csv
+*.npy
+*.model
+*.model.wv.vectors.npy
+
+# OS specific
+.DS_Store
