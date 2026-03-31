@@ -44,13 +44,46 @@ jupyter notebook
 Navigate to the `notebooks/` directory and open them sequentially from 1 to 5.
 
 ## 🛠️ Key Technical Features
-1. **Cleaning:** Handled Missing Values, Lowercase, Lemmatization, Spelling correction (with `TextBlob`).
-2. **Topic Modeling:** Extracted Top-5 review topics using LDA and named them manually for interpretability.
-3. **Embeddings:** Trained `Word2Vec`, plotted using `t-SNE` & `PCA`, integrated semantic Search.
-4. **Supervised Learning:**
-    - Fast Random Forest & Logistic Regression using `TF-IDF` for Sentiments and Stars Prediction.
-    - Zero-Shot Category Classification using large language models (`valhalla/distilbart-mnli-12-3`).
-5. **Interactive UI App:** Model Explanations with `LIME`, Retrieval-Augmented Generation (RAG) with DistilBERT QA Model.
+
+### 1. Data Cleaning & Preprocessing
+Handled Missing Values, Lowercase, Lemmatization, and Spelling Correction (using `TextBlob`). 
+**Result:** A structured dataset was generated with multiple processed columns explicitly including `original_review`, `cleaned_text`, `corrected_text`, `translated_text`, `sentiment`, and `category`.
+
+### 2. Topic Modeling (Unsupervised)
+Extracted the Top-5 review topics using LDA and named them manually for interpretability:
+- **Topic 1: General Coverage & Contracts** → *plus, mois, assurance, contrat, depuis*
+- **Topic 2: Allowances & Claims** → *depuis, indemnités, mois, prévoyance, dossier*
+- **Topic 3: Life Insurance & Capital** → *contrat, cnp, capital, total, décès*
+- **Topic 4: Medical Fees & Costs** → *zéro, frais, 100, mot, soins*
+- **Topic 5: Customer Service & Delays** → *demande, plus, service, attente, client*
+
+### 3. Word Embeddings
+Trained `Word2Vec` on the corpus. **Cosine similarity** was used to compute semantic distance between word vectors. Embeddings were visualized using **t-SNE** and **PCA** (TensorBoard integration is optionally supported for deeper visualization).
+
+### 4. Supervised Learning & Model Comparison
+Data was split into training and testing sets (80/20) for rigorous evaluation. We used classical ML models as well as modern LLMs. Notably, **TF-IDF + Logistic Regression was also used to predict review categories (themes)**, not only sentiment.
+
+**Model Comparison:**
+- **Logistic Regression (TF-IDF):** 82% Accuracy
+- **Random Forest:** 79% Accuracy
+- **Transformer (DistilBERT):** 88% Accuracy
+
+*Conclusion:* The Transformer provides the best performance but at a higher computational cost compared to classical models.
+
+### 5. Interactive UI App (RAG & Explanations)
+- **Model Explanations:** Explaining feature weights visually with `LIME`.
+- **Retrieval-Augmented Generation (RAG):** The RAG system retrieves relevant reviews using embeddings (cosine similarity) and generates answers using a QA model (DistilBERT).
+
+## 💡 Business Insights
+- **Customer service issues** consistently correlate with the lowest star ratings.
+- **Pricing complaints** are frequent but often less negative in overall sentiment compared to ignored claims.
+- **Claims processing delays** form a highly negative cluster of reviews, requiring immediate business remediation.
+
+## ⚠️ Error Analysis
+Despite strong model performance, we identified several failure modes during error analysis:
+- **Lack of Context:** Short reviews (e.g., "Good", "Terrible") lack sufficient semantic context, leading to misclassification.
+- **Neutral vs Positive Overlap:** Nuanced neutral reviews are sometimes confused with positive ones by the model.
+- **Domain-Specific Vocabulary:** Industry jargon impacts predictions if not sufficiently present in pre-trained model vocabularies.
 
 ## 🎥 Video Presentation Plan (5 mins)
 1. **Introduction (30s):** Project goal & NLP Application for Insurer analytics.
